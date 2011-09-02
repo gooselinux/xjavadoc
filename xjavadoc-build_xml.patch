@@ -1,0 +1,62 @@
+--- build.xml.orig	2004-06-29 11:23:25.332349000 +0200
++++ build.xml	2004-06-29 15:29:29.879533000 +0200
+@@ -6,6 +6,8 @@
+    <property name="jardir" location="${build.dir}"/>
+    <property name="rootdir" location="${basedir}"/>
+    <property name="javacchome" location="${basedir}/lib"/>
++   <property name="javadocdir" value="dist/docs/api"/>
++   <property name="final.name" value="xjavadoc-1.0.3"/>
+ 
+    <!-- =================================================================== -->
+    <!-- Initialization target.                                              -->
+@@ -83,6 +85,7 @@
+       WE'RE USING THE OLD XDOCLET, THE ONE THAT USES SUN'S JAVADOC.
+       IT'S TO SEE IF XJAVADOC DOES THE SAME JOB AS JAVADOC
+       -->
++<!-- OMIT TEST GENERATION AS SOURCES FOR OLD XDOCLET NOT AVAILABLE
+       <taskdef
+          name="xdoclet"
+          classname="xdoclet.DocletTask"
+@@ -95,7 +98,6 @@
+          classpathref="classpath"
+       >
+          <fileset dir="${build.dir}/src">
+-            <!-- Just run it over the biggest classes -->
+             <include name="xjavadoc/XJavaDoc.java"/>
+             <include name="xjavadoc/AbstractClass.java"/>
+             <include name="xjavadoc/XDoc.java"/>
+@@ -111,6 +113,7 @@
+             subTaskClassName="xdoclet.NoInnerClassSubTask"
+          />
+       </xdoclet>
++-->
+ 
+       <mkdir dir="${build.dir}/test-classes"/>
+       <javac
+@@ -235,4 +238,26 @@
+          multi="false"
+       />
+    </target>
++  <target name="javadoc" description="o Generate javadoc" depends="jar">
++    <mkdir dir="${javadocdir}">
++    </mkdir>
++    <tstamp>
++      <format pattern="2002-yyyy" property="year">
++      </format>
++    </tstamp>
++    <property name="copyright" value="Copyright &amp;copy;  XDoclet Team. All Rights Reserved.">
++    </property>
++    <property name="title" value="XJavaDoc 1.0.3 API">
++    </property>
++    <javadoc use="true" private="true" destdir="${javadocdir}" author="true" version="true" sourcepath="target/src" packagenames="xjavadoc.*">
++      <classpath>
++        <fileset dir="lib">
++          <include name="*.jar">
++          </include>
++        </fileset>
++        <pathelement location="target/${final.name}.jar">
++        </pathelement>
++      </classpath>
++    </javadoc>
++  </target>
+ </project>
